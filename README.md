@@ -21,7 +21,7 @@ A beautiful, ocean-themed memory card game built with HTML, CSS, and JavaScript.
 
 ## 🚀 Play Online
 
-[Play the game here!](https://your-username.github.io/ocean-memory-game)
+[Play the game here!](https://yiliu12.github.io/ocean-memory-game)
 
 ## 🛠️ Technologies Used
 
