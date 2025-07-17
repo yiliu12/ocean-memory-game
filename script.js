@@ -121,6 +121,7 @@ class OceanMemoryGame {
         
         this.createCards();
         this.updateDisplay();
+        this.updateProcessingState(); // Reset visual feedback
         this.startTimer();
     }
 
@@ -164,14 +165,21 @@ class OceanMemoryGame {
             return;
         }
 
+        // If we already have 2 cards flipped, don't allow a third
+        if (this.flippedCards.length >= 2) {
+            return;
+        }
+
         const card = this.cards[index];
         card.isFlipped = true;
         this.flippedCards.push(index);
         
         this.updateCardDisplay(index);
         
+        // If we have 2 cards flipped, process the match
         if (this.flippedCards.length === 2) {
             this.isProcessing = true; // Prevent further clicks during processing
+            this.updateProcessingState(); // Add visual feedback
             this.checkMatch();
         }
     }
@@ -210,6 +218,7 @@ class OceanMemoryGame {
                 setTimeout(() => {
                     this.flippedCards = [];
                     this.isProcessing = false; // Re-enable clicking
+                    this.updateProcessingState(); // Update visual feedback
                 }, 1000);
             }
         } else {
@@ -221,6 +230,7 @@ class OceanMemoryGame {
                 this.updateCardDisplay(index2);
                 this.flippedCards = [];
                 this.isProcessing = false; // Re-enable clicking
+                this.updateProcessingState(); // Update visual feedback
                 
                 // Switch players in two-player mode
                 if (this.gameMode === 'two') {
@@ -245,6 +255,18 @@ class OceanMemoryGame {
         } else {
             cardElement.classList.remove('flipped', 'matched');
             cardElement.textContent = '';
+        }
+    }
+
+    // Add visual feedback for processing state
+    updateProcessingState() {
+        const cardsGrid = document.getElementById('cardsGrid');
+        if (this.isProcessing) {
+            cardsGrid.style.pointerEvents = 'none';
+            cardsGrid.style.opacity = '0.7';
+        } else {
+            cardsGrid.style.pointerEvents = 'auto';
+            cardsGrid.style.opacity = '1';
         }
     }
 
@@ -351,6 +373,7 @@ class OceanMemoryGame {
         
         this.createCards();
         this.updateDisplay();
+        this.updateProcessingState(); // Reset visual feedback
         this.startTimer();
     }
 
