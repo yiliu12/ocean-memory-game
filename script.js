@@ -14,6 +14,7 @@ class OceanMemoryGame {
         this.timer = null;
         this.startTime = null;
         this.isGameActive = false;
+        this.isProcessing = false; // Flag to prevent rapid clicking
         
         // Ocean-themed emojis for cards
         this.oceanEmojis = ['🐠', '🐟', '🐡', '🦈', '🐙', '🦑', '🦐', '🦞', '🦀', '🐚', '🌊', '🏝️', '⚓', '🚢', '🐋', '🐬'];
@@ -113,6 +114,7 @@ class OceanMemoryGame {
         this.matchedPairs = 0;
         this.currentPlayer = 1;
         this.flippedCards = [];
+        this.isProcessing = false; // Reset processing flag
         
         document.getElementById('gameSetup').classList.add('hidden');
         document.getElementById('gameBoard').classList.remove('hidden');
@@ -157,7 +159,8 @@ class OceanMemoryGame {
     }
 
     flipCard(index) {
-        if (!this.isGameActive || this.cards[index].isFlipped || this.cards[index].isMatched) {
+        // Prevent rapid clicking and invalid moves
+        if (!this.isGameActive || this.isProcessing || this.cards[index].isFlipped || this.cards[index].isMatched) {
             return;
         }
 
@@ -168,6 +171,7 @@ class OceanMemoryGame {
         this.updateCardDisplay(index);
         
         if (this.flippedCards.length === 2) {
+            this.isProcessing = true; // Prevent further clicks during processing
             this.checkMatch();
         }
     }
@@ -205,6 +209,7 @@ class OceanMemoryGame {
                 // Keep current player's turn
                 setTimeout(() => {
                     this.flippedCards = [];
+                    this.isProcessing = false; // Re-enable clicking
                 }, 1000);
             }
         } else {
@@ -215,6 +220,7 @@ class OceanMemoryGame {
                 this.updateCardDisplay(index1);
                 this.updateCardDisplay(index2);
                 this.flippedCards = [];
+                this.isProcessing = false; // Re-enable clicking
                 
                 // Switch players in two-player mode
                 if (this.gameMode === 'two') {
@@ -341,6 +347,7 @@ class OceanMemoryGame {
         this.currentPlayer = 1;
         this.flippedCards = [];
         this.isGameActive = true;
+        this.isProcessing = false; // Reset processing flag
         
         this.createCards();
         this.updateDisplay();
